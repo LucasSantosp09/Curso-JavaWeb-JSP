@@ -1,6 +1,9 @@
 package filter;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -13,10 +16,13 @@ import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import connection.SingleConnectionBanco;
+
 
 @WebFilter(urlPatterns = {"/principal/*"}) /*Interceptas todas as requisições que vierem do projeto ou mapemaento*/
 public class FilterAutenticacao extends HttpFilter implements Filter {
        
+	private static Connection connection;
 
     public FilterAutenticacao() {
         super();
@@ -26,7 +32,11 @@ public class FilterAutenticacao extends HttpFilter implements Filter {
     /*Encerra os processos quando o servidor é parado*/
     /*Mataria os processo de conexão com o banco*/
 	public void destroy() {
-		
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
     /*Intercepta as requisicoes e as respostas do sistema*/
@@ -34,7 +44,10 @@ public class FilterAutenticacao extends HttpFilter implements Filter {
 	/*Validação de autenticação*/
 	/*Dar commit e rollback de transações do banco*/
 	
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) 
+		throws IOException, ServletException {
+		
+		try {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpSession session = req.getSession();
 		
@@ -53,14 +66,31 @@ public class FilterAutenticacao extends HttpFilter implements Filter {
 			chain.doFilter(request, response);
 		}
 		
-
+		connection.commit();/*commita as alterações no banco*/
+		
+		
+		}catch (Exception e) {
+			e.printStackTrace();
+			
+			RequestDispatcher redirecionar = request.getRequestDispatcher("/erro.jsp");
+			request.setAttribute("msg", e.getMessage());
+			redirecionar.forward(request, response);
+			
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		}
+		
+	
 	}
 
 
 	/*Inicia os processos ou recursos quando o servidor sobe o projeto*/
 	/*Iniciar conexãp com o banco*/
 	public void init(FilterConfig fConfig) throws ServletException {
-		
+		connection = SingleConnectionBanco.getConnection();
 	}
 
 }
