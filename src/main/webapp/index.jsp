@@ -43,7 +43,7 @@ h4 {
 	<h5>Bem vindo ao Curso JSP</h5>
 
 
-	<form action="ServletLogin" method="post"
+	<form action="<%= request.getContextPath() %>/ServletLogin" method="post"
 		class="row g-3 needs-validation">
 		<input type="hidden" value="<%=request.getParameter("url")%>"
 			name="url">
