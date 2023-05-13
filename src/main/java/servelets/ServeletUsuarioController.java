@@ -37,6 +37,7 @@ public class ServeletUsuarioController extends HttpServlet {
 		
 		try {
 			
+		String msg = "Operação Realizada com Sucesso !";
 
 		String id = request.getParameter("id");
 		String nome = request.getParameter("nome");
@@ -52,10 +53,15 @@ public class ServeletUsuarioController extends HttpServlet {
 		modelLogin.setLogin(login);
 		modelLogin.setSenha(senha);
 		
+		if (daoUsuarioRepository.validarLogin(modelLogin.getLogin()) &&  modelLogin.getId() == null) {
+			msg = "Já existe usuário com o mesmo login, informe outro login";
+		}else {
+			modelLogin = daoUsuarioRepository.gravarUsuario(modelLogin);
+		}
 
-		modelLogin = daoUsuarioRepository.gravarUsuario(modelLogin);
+
 		
-		request.setAttribute("msg", "Operação Realizada com Sucesso !");
+		request.setAttribute("msg", msg);
 	
 		request.setAttribute("modolLogin",modelLogin);
 		
