@@ -1,7 +1,6 @@
 package servelets;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,67 +12,77 @@ import javax.servlet.http.HttpServletResponse;
 import dao.DAOUsuarioRepository;
 import model.ModelLogin;
 
-
 @WebServlet("/ServeletUsuarioController")
 public class ServeletUsuarioController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
 	private DAOUsuarioRepository daoUsuarioRepository = new DAOUsuarioRepository();
-	
-    public ServeletUsuarioController() {
-        super();
-       
-    }
 
+	public ServeletUsuarioController() {
+		super();
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		
 	}
 
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		try {
-			
-		String msg = "Operação Realizada com Sucesso !";
+			String acao = request.getParameter("acao");
 
-		String id = request.getParameter("id");
-		String nome = request.getParameter("nome");
-		String email = request.getParameter("email");
-		String login = request.getParameter("login");
-		String senha = request.getParameter("senha");
-		
-		ModelLogin modelLogin = new ModelLogin();
-		
-		modelLogin.setId(id != null && !id.isEmpty() ? Long.parseLong(id):null);
-		modelLogin.setNome(nome);
-		modelLogin.setEmail(email);
-		modelLogin.setLogin(login);
-		modelLogin.setSenha(senha);
-		
-		if (daoUsuarioRepository.validarLogin(modelLogin.getLogin()) &&  modelLogin.getId() == null) {
-			msg = "Já existe usuário com o mesmo login, informe outro login";
-		}else {
-			modelLogin = daoUsuarioRepository.gravarUsuario(modelLogin);
-		}
+			if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("deletar")) {
+				String idUser = request.getParameter("id");
+				daoUsuarioRepository.deletarUser(idUser);
+				request.setAttribute("msg", "Excluído com Sucesso !");
+				request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
+			}
 
-
-		
-		request.setAttribute("msg", msg);
-	
-		request.setAttribute("modolLogin",modelLogin);
-		
-		request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
 			RequestDispatcher redirecionar = request.getRequestDispatcher("/erro.jsp");
 			request.setAttribute("msg", e.getMessage());
 			redirecionar.forward(request, response);
 		}
-		
-		
+
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		try {
+
+			String msg = "Operação Realizada com Sucesso !";
+
+			String id = request.getParameter("id");
+			String nome = request.getParameter("nome");
+			String email = request.getParameter("email");
+			String login = request.getParameter("login");
+			String senha = request.getParameter("senha");
+
+			ModelLogin modelLogin = new ModelLogin();
+
+			modelLogin.setId(id != null && !id.isEmpty() ? Long.parseLong(id) : null);
+			modelLogin.setNome(nome);
+			modelLogin.setEmail(email);
+			modelLogin.setLogin(login);
+			modelLogin.setSenha(senha);
+
+			if (daoUsuarioRepository.validarLogin(modelLogin.getLogin()) && modelLogin.getId() == null) {
+				msg = "Já existe usuário com o mesmo login, informe outro login";
+			} else {
+				modelLogin = daoUsuarioRepository.gravarUsuario(modelLogin);
+			}
+
+			request.setAttribute("msg", msg);
+
+			request.setAttribute("modolLogin", modelLogin);
+
+			request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
+		} catch (Exception e) {
+			e.printStackTrace();
+			RequestDispatcher redirecionar = request.getRequestDispatcher("/erro.jsp");
+			request.setAttribute("msg", e.getMessage());
+			redirecionar.forward(request, response);
+		}
+
 	}
 
 }
