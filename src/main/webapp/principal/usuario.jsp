@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -92,6 +97,32 @@
 											</div>
 										</div>
 										<span id="msg">${msg}</span>
+
+										<div style="height: 300px; overflow: scroll;">
+
+											<table class="table" id="tabelaresultadosview"
+												name="tabelaresultados">
+												<thead>
+													<tr>
+														<th scope="col">ID</th>
+														<th scope="col">Nome</th>
+														<th scope="col">Ver</th>
+													</tr>
+												</thead>
+												<tbody>
+													<c:forEach items='${modelLogins}' var='ml'>
+														<tr>
+															<td><c:out value="${ml.id}"></c:out></td>
+															<td><c:out value="${ml.nome}"></c:out></td>
+															<td><a class="btn btn-success"
+																href="<%= request.getContextPath() %>/ServeletUsuarioController?acao=buscarEditar&id=${ml.id}">Ver</a></td>
+														</tr>
+													</c:forEach>
+												</tbody>
+											</table>
+
+										</div>
+
 									</div>
 									<!-- Page-body end -->
 								</div>
@@ -129,7 +160,7 @@
 						<input type="text" class="form-control" placeholder="Nome"
 							aria-label="nome" id="nomeBusca" aria-describedby="basic-addon1">
 					</div>
-					<div style="height: 300px;overflow: scroll;">
+					<div style="height: 300px; overflow: scroll;">
 
 						<table class="table" id="tabelaresultados" name="tabelaresultados">
 							<thead>
@@ -156,6 +187,12 @@
 	</div>
 
 	<script type="text/javascript">
+		function verEditar(id) {
+			var urlAction = document.getElementById('formUser').action;
+
+			window.location.href = urlAction + '?acao=buscarEditar&id=' + id;
+		}
+
 		function buscarUsuario() {
 
 			var nomeBusca = document.getElementById('nomeBusca').value;
@@ -185,7 +222,9 @@
 																	+ json[p].id
 																	+ '</td> <td>'
 																	+ json[p].nome
-																	+ '</td> <td><button type="button" class="btn btn-info">Ver</button></td><tr>')
+																	+ '</td> <td><button onclick="verEditar('
+																	+ json[p].id
+																	+ ')" type="button" class="btn btn-info">Ver</button></td><tr>')
 										}
 
 									}

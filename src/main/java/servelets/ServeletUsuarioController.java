@@ -3,19 +3,19 @@ package servelets;
 import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dao.DAOUsuarioRepository;
 import model.ModelLogin;
 
-@WebServlet("/ServeletUsuarioController")
+@WebServlet(urlPatterns = { "/ServeletUsuarioController"})
 public class ServeletUsuarioController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -57,7 +57,28 @@ public class ServeletUsuarioController extends HttpServlet {
 				
 				response.getWriter().write(json);
 			}
+			else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscarEditar")) {
+				String id = request.getParameter("id");
+				
+				ModelLogin modelLogin = daoUsuarioRepository.consultaUsuarioID(id);
+				
+				request.setAttribute("msg", "Usuário em Edição");
+
+				request.setAttribute("modolLogin", modelLogin);
+
+				request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
+				
+			}
 			
+			 else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("listarUser")) {
+				 
+				 List<ModelLogin> modelLogins = daoUsuarioRepository.consultaUsuarioList();
+				 
+				 request.setAttribute("msg", "Usuários carregados");
+			     request.setAttribute("modelLogins", modelLogins);
+				 request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
+				 
+			 }
 			else {
 				request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
 			}
