@@ -95,6 +95,7 @@ public class DAOUsuarioRepository {
 
 		return retorno;
 	}
+	
 
 	public List<ModelLogin> consultaUsuarioList() throws Exception {
 
