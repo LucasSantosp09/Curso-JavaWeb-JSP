@@ -3,18 +3,19 @@ package servelets;
 import java.io.IOException;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import dao.DAOUsuarioRepository;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import dao.DAOUsuarioRepository;
 import model.ModelLogin;
 
+@MultipartConfig
 @WebServlet(urlPatterns = { "/ServeletUsuarioController"})
 public class ServeletUsuarioController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -105,6 +106,17 @@ public class ServeletUsuarioController extends HttpServlet {
 			String email = request.getParameter("email");
 			String login = request.getParameter("login");
 			String senha = request.getParameter("senha");
+			String sexo = request.getParameter("sexo");
+			String uf = request.getParameter("uf");
+			String cep = request.getParameter("cep");
+			String localidade = request.getParameter("localidade");
+			String logradouro = request.getParameter("logradouro");
+			String bairro = request.getParameter("bairro");
+			String numero = request.getParameter("numero");
+			
+			
+			
+			
 
 			ModelLogin modelLogin = new ModelLogin();
 
@@ -113,7 +125,17 @@ public class ServeletUsuarioController extends HttpServlet {
 			modelLogin.setEmail(email);
 			modelLogin.setLogin(login);
 			modelLogin.setSenha(senha);
-
+			modelLogin.setSexo(sexo);
+			modelLogin.setCep(cep);
+			modelLogin.setLocalidade(localidade);
+			modelLogin.setLogradouro(logradouro);
+			modelLogin.setBairro(bairro);
+			modelLogin.setUf(uf);
+			modelLogin.setNumero(numero);
+			
+			
+		
+			
 			if (daoUsuarioRepository.validarLogin(modelLogin.getLogin()) && modelLogin.getId() == null) {
 				msg = "Já existe usuário com o mesmo login, informe outro login";
 			} else {

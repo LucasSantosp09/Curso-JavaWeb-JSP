@@ -1,3 +1,4 @@
+<%@page import="model.ModelLogin"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
@@ -43,7 +44,7 @@
 
 													<div class="card-block">
 														<h4 class="sub-title">Cadastro de Usuário</h4>
-														<form class="form-material"
+														<form class="form-material" enctype="multipart/form-data"
 															action="<%=request.getContextPath()%>/ServeletUsuarioController"
 															method="post" id="formUser">
 
@@ -55,6 +56,8 @@
 																	value="${modolLogin.id}"> <span
 																	class="form-bar"></span> <label class="float-label">ID:</label>
 															</div>
+
+
 															<div class="form-group form-default">
 																<input type="text" name="nome" id="nome"
 																	class="form-control" required="required"
@@ -69,6 +72,41 @@
 																</label>
 															</div>
 															<div class="form-group form-default">
+                                                                <input onblur="pesquisarCep();" type="text" name="cep" id="cep" class="form-control" required="required" value="${modelLogin.endereco.cep}">
+                                                                <span class="form-bar"></span>
+                                                                <label class="float-label">Cep:</label>
+                                                            </div> 
+															<div class="form-group form-default">
+																<input type="text" name="logradouro" id="logradouro"
+																	class="form-control" required="required"
+																	value="${modolLogin.logradouro}"> <span
+																	class="form-bar"></span> <label class="float-label">Logradouro:</label>
+															</div>
+															<div class="form-group form-default">
+																<input type="text" name="bairro" id="bairro"
+																	class="form-control" required="required"
+																	value="${modolLogin.bairro}"> <span
+																	class="form-bar"></span> <label class="float-label">Bairro:</label>
+															</div>
+															<div class="form-group form-default">
+																<input type="text" name="localidade" id="localidade"
+																	class="form-control" required="required"
+																	value="${modolLogin.localidade}"> <span
+																	class="form-bar"></span> <label class="float-label">Localidade:</label>
+															</div>
+															<div class="form-group form-default">
+																<input type="text" name="uf" id="uf"
+																	class="form-control" required="required"
+																	value="${modolLogin.uf}"> <span
+																	class="form-bar"></span> <label class="float-label">Estado:</label>
+															</div>
+															<div class="form-group form-default">
+																<input type="text" name="numero" id="numero"
+																	class="form-control" required="required"
+																	value="${modolLogin.numero}"> <span
+																	class="form-bar"></span> <label class="float-label">Numero:</label>
+															</div>													
+															<div class="form-group form-default">
 																<input type="text" name="login" id="login"
 																	class="form-control" required="required"
 																	value="${modolLogin.login}"> <span
@@ -78,7 +116,27 @@
 																<input type="password" name="senha" id="senha"
 																	class="form-control" required="required"
 																	value="${modolLogin.senha}"> <span
-																	class="form-bar"></span> <label class="float-label">Senha</label>
+																	class="form-bar"></span> <label class="float-label">Senha:</label>
+															</div>
+															<div class="form-group form-default form-static-label">
+																<input type="radio" name="sexo" checked="checked"
+																	value="MASCULINO"
+																	<%ModelLogin modelLogin = (ModelLogin) request.getAttribute("modolLogin");
+
+																	if (modelLogin != null && modelLogin.getSexo().equals("MASCULINO")) {
+																		out.print(" ");
+																		out.print("checked=\"checked\"");
+																		out.print(" ");
+																	}%>>Masculino</>
+
+																<input type="radio" name="sexo" value="FEMININO"
+																	<%modelLogin = (ModelLogin) request.getAttribute("modolLogin");
+
+																	if (modelLogin != null && modelLogin.getSexo().equals("FEMININO")) {
+																		out.print(" ");
+																		out.print("checked=\"checked\"");
+																		out.print(" ");
+																	}%>>Feminino</>
 															</div>
 															<button type="button"
 																class="btn btn-primary waves-effect waves-light"
@@ -187,6 +245,25 @@
 	</div>
 
 	<script type="text/javascript">
+	
+	
+    function pesquisarCep() {
+    	var cep = $("#cep").val();
+    	var url = "https://viacep.com.br/ws/" + cep + "/json/?callback=?";
+    	$.getJSON(url, function(dados) {
+    		if (!("erro" in dados)) {
+    			$("#cep").val(dados.cep);
+    			$("#logradouro").val(dados.logradouro);
+    			$("#bairro").val(dados.bairro);
+    			$("#localidade").val(dados.localidade);
+    			$("#uf").val(dados.uf);
+    		}
+    	});
+    }
+
+	
+	
+	
 		function verEditar(id) {
 			var urlAction = document.getElementById('formUser').action;
 
