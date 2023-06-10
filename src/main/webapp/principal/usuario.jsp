@@ -145,6 +145,7 @@
 															<button type="button"
 																class="btn btn-danger waves-effect waves-light"
 																onclick="criarDeleteComAjax();">Excluir</button>
+															<a href="<%= request.getContextPath() %>/ServeletTelefoneController?iduser=${modolLogin.id}" class="btn btn-primary waves-effect waves-light">Telefone</a>
 															<button type="button" class="btn btn-secondary"
 																data-toggle="modal" data-target="#exampleModalUsuario">
 																Pesquisar</button>
