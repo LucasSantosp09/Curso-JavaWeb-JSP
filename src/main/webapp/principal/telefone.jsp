@@ -20,9 +20,9 @@
 					<jsp:include page="navbarmainmenu.jsp"></jsp:include>
 
 					<div class="pcoded-content">
-						
+
 						<jsp:include page="pageheader.jsp"></jsp:include>
-						
+
 						<!-- Page-header end -->
 						<div class="pcoded-inner-content">
 							<!-- Main-body start -->
@@ -30,11 +30,44 @@
 								<div class="page-wrapper">
 									<!-- Page-body start -->
 									<div class="page-body">
-										<h1>Tela de Telefone</h1>
+
+										<div class="row">
+											<div class="col-sm-12">
+												<div class="card">
+													<div class="card-block">
+														<h4 class="sub-title">Cadastro de Telefone</h4>
+														<form class="form-material" action="<%=request.getContextPath()%>/ServeletTelefoneController" method="post" id="formFone">
+																
+															<div class="form-group form-default form-static-label">
+																<input type="text" name="id" id="id"
+																	class="form-control" readonly="readonly"
+																	value="${modelLogin.id}"> <span
+																	class="form-bar"></span> <label class="float-label">ID:</label>
+															</div>
+															<div class="form-group form-default form-static-label">
+																<input readonly="readonly" type="text" name="nome" id="nome"
+																	class="form-control" required="required"
+																	value="${modelLogin.nome}"> <span
+																	class="form-bar"></span> <label class="float-label">Nome:</label>
+															</div>
+															<div class="form-group form-default form-static-label">
+																<input  type="text" name="numero" id="numero"
+																	class="form-control" required="required"> 
+																	<span class="form-bar"></span> 
+																	<label class="float-label">Numero:</label>
+															</div>
+															<button class="btn btn-success waves-effect waves-light">Salvar</button>
+														</form>
+													</div>
+												</div>
+											</div>
+										</div>
+										
+										<span id="msg">${msg}</span>
+										<!-- Page-body end -->
 									</div>
-									<!-- Page-body end -->
+									<div id="styleSelector"></div>
 								</div>
-								<div id="styleSelector"></div>
 							</div>
 						</div>
 					</div>
@@ -44,7 +77,7 @@
 	</div>
 
 
-	<jsp:include page="javascriptfile.jsp"></jsp:include>
+		<jsp:include page="javascriptfile.jsp"></jsp:include>
 </body>
 
 </html>

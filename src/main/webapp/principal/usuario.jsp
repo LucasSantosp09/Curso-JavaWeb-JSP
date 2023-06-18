@@ -39,9 +39,7 @@
 
 										<div class="row">
 											<div class="col-sm-12">
-												<!-- Basic Form Inputs card start -->
 												<div class="card">
-
 													<div class="card-block">
 														<h4 class="sub-title">Cadastro de Usuário</h4>
 														<form class="form-material" enctype="multipart/form-data"
